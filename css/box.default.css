@@ -1,0 +1,30 @@
+pre.src {
+  padding: .5em;
+  border: 1px solid #666;
+  background: #333;
+}
+
+pre.example {
+  padding: .5em;
+  border: 1px solid #666;
+  background: #333;
+}
+
+table {
+  margin: 0 auto;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  box-shadow: 0 0 6px rgba(0,0,0,.3);
+}
+
+table th, table td {
+  border: 1px solid #999 !important;
+  text-align: center !important;
+  padding: 1% !important;
+  text-shadow: 2px 2px #333;
+}
+
+table th {
+  background: #555;
+}
