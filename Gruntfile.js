@@ -14,7 +14,6 @@ module.exports = function(grunt) {
 				' * Copyright (C) 2014 Hakim El Hattab, http://hakim.se\n' +
 				' */'
 		},
-
 		qunit: {
 			files: [ 'test/*.html' ]
 		},
@@ -85,6 +84,16 @@ module.exports = function(grunt) {
 			}
 		},
 
+    to_html: {
+        options: {
+          // Task-specific options go here.
+          //generatePage: true,
+          //title: "My Decks",
+          //rootDirectory: "/opt/reveal.js/",
+        },
+        'index.html': 'decks/**/*.html',
+    },
+
 		zip: {
 			'reveal-js-presentation.zip': [
 				'index.html',
@@ -104,12 +113,22 @@ module.exports = function(grunt) {
 			theme: {
 				files: [ 'css/theme/source/*.scss', 'css/theme/template/*.scss' ],
 				tasks: 'themes'
-			}
+			},
+			decks: {
+				files: [ 'decks/**' ],
+				tasks: 'to_html',
+        options: {
+          livereload: true,
+          event: ['added', 'changed', 'deleted']
+        }
+			},
 		}
 
 	});
 
 	// Dependencies
+	grunt.loadNpmTasks( 'grunt-contrib-livereload' );
+	grunt.loadNpmTasks( 'grunt-regarde' );
 	grunt.loadNpmTasks( 'grunt-contrib-qunit' );
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
@@ -117,10 +136,11 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks( 'grunt-contrib-watch' );
 	grunt.loadNpmTasks( 'grunt-contrib-sass' );
 	grunt.loadNpmTasks( 'grunt-contrib-connect' );
+  grunt.loadNpmTasks( 'grunt-directory-to-html' );
 	grunt.loadNpmTasks( 'grunt-zip' );
 
 	// Default task
-	grunt.registerTask( 'default', [ 'jshint', 'cssmin', 'uglify', 'qunit' ] );
+	grunt.registerTask( 'default', [ 'jshint', 'cssmin', 'uglify', 'qunit', 'to_html' ] );
 
 	// Theme task
 	grunt.registerTask( 'themes', [ 'sass' ] );
@@ -129,7 +149,7 @@ module.exports = function(grunt) {
 	grunt.registerTask( 'package', [ 'default', 'zip' ] );
 
 	// Serve presentation locally
-	grunt.registerTask( 'serve', [ 'connect', 'watch' ] );
+	grunt.registerTask( 'serve', [ 'to_html', 'connect', 'watch' ] );
 
 	// Run tests
 	grunt.registerTask( 'test', [ 'jshint', 'qunit' ] );
